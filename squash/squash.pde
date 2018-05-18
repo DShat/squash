@@ -1,41 +1,27 @@
-PVector FirstBackgroundColour[];
-PVector SecondBackgroundColour[];
 int y = 8*height/3;
 int backgroundColour1 = #000000;
 int backgroundColour2 = #FFFFFF;
 float bgColourmodifier;
+int bG1[];
+int bG2[];
+int bG3[];
+int bG4[];
+int bG5[];
+int bG6[];
 int i;
-int bG1 = 0;
-int bG2 = 255;
-int bG3 = 255;
-int bG4 = 255;
-int bG5 = 0;
-int bG6 = 255;
-void setup() {
-  size(700, 580); 
-  FirstBackgroundColour = new PVector[10];
-  for (int i = 0; i < FirstBackgroundColour.length; i++) {
-    FirstBackgroundColour[i] = new PVector(bG1, bG2, bG3);
-    bG1+=10;
-    bG2-=10;
-    bG3-=10;
-  }
-  
-  SecondBackgroundColour = new PVector[10];
-  for (int i = 0; i < FirstBackgroundColour.length; i++) {
-    SecondBackgroundColour[i] = new PVector(bG4, bG5, bG6);
-    bG4-=10;
-    bG5+=10;
-    bG6-=10;
+void setup() { 
+  size(700, 580);
+  bG1 = new int[10];
+  for(int q=0; q<bG1.length; q+=1){
+    bG1[q] = (q*10);
   }
 }
-
 void draw() {
   background(#FFFFFF);
   i=0;
   bgColourmodifier=0;
   while (i<width/2) {
-    fill(lerpColor(FirstBackgroundColour[1], SecondBackgroundColour[1], bgColourmodifier));
+    fill(lerpColor(bG1[9], backgroundColour2, bgColourmodifier));
     noStroke();
     rect(i, 0, i+2, height, 0.25);
     i+=1;
