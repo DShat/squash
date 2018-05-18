@@ -15,6 +15,27 @@ void setup() {
   for(int q=0; q<bG1.length; q+=1){
     bG1[q] = (q*10);
   }
+   bG2 = new int[10];
+  for(int q=0; q<bG2.length; q+=1){
+    bG2[q] = (255-q*10);
+  }
+   bG3 = new int[10];
+  for(int q=0; q<bG3.length; q+=1){
+    bG3[q] = (255-q*10);
+  }
+   bG4 = new int[10];
+  for(int q=0; q<bG4.length; q+=1){
+    bG4[q] = (255-q*10);
+  }
+   bG5 = new int[10];
+  for(int q=0; q<bG5.length; q+=1){
+    bG5[q] = (q*10);
+    }
+   bG6 = new int[10];
+  for(int q=0; q<bG6.length; q+=1){
+    bG6[q] = (255-q*10);
+  }
+  }
 }
 void draw() {
   background(#FFFFFF);
