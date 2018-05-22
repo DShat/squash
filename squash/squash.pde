@@ -1,6 +1,6 @@
 int y = 8*height/3;
 int backgroundColour1[];
-int backgroundColour2 = #FFFFFF;
+int backgroundColour2[];
 float bgColourmodifier;
 int bG1[];
 int bG2[];
@@ -17,15 +17,20 @@ void setup() {
   }
   backgroundColour1 = new int[10];
   for(int q=0;q<backgroundColour1.length;q++){
-  backgroundColour1[q] = color(bG1[q],bG1[q],bG2[q]);
+  backgroundColour1[q] = color(bG1[q],bG2[q],bG1[q]);
+  }
+  backgroundColour2 = new int[10];
+  for(int q=0;q<backgroundColour1.length;q++){
+  backgroundColour2[q] = color(bG2[q],bG2[q],bG1[q]);
   }
 }
 void draw() {
   background(#FFFFFF);
+  int bgNumber=8;
   i=0;
   bgColourmodifier=0;
   while (i<width/2) {
-    fill(lerpColor(backgroundColour1[9], backgroundColour2, bgColourmodifier));
+    fill(lerpColor(backgroundColour1[bgNumber], backgroundColour2[bgNumber], bgColourmodifier));
     noStroke();
     rect(i, 0, i+2, height, 0.25);
     i+=1;
@@ -38,7 +43,7 @@ void draw() {
   i=width/2;
   bgColourmodifier=0;
   while (i<width) {
-    fill(lerpColor(backgroundColour2, backgroundColour1[9], bgColourmodifier));
+    fill(lerpColor(backgroundColour2[bgNumber], backgroundColour1[bgNumber], bgColourmodifier));
     noStroke();
     rect(i, 0, i+2, height, 0.25);
     i+=1;
@@ -53,4 +58,5 @@ void draw() {
       y-=15;
     }
   }
+  
 }
