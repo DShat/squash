@@ -120,22 +120,21 @@ void theWall() {
 }
 
 void ballBounce() {
-  if (ballX>width-100 - ballWidth/2) {
+  if (ballX > width-100 - ballWidth/2) {
     xSpeed = -xSpeed;
   }
-  if (ballY> height - ballHeight/2) {
+  if (ballY > height - ballHeight/2) {
     ySpeed = -ySpeed;
-  } else if (ballY<ballHeight/2) {
+  } else if (ballY < ballHeight/2) {
     ySpeed = -ySpeed;
   }
 }
 
 void paddleBounce() {
-  if (ballX - ballWidth/2 < paddleX + paddleWidth && ballY - ballHeight/2 < paddleY + paddleHeight/2 && ballY + ballHeight/2 > paddleY - paddleHeight/2) { 
+  if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
       xSpeed = -xSpeed*119/100;
-      ySpeed = ySpeed*110/100;
-      score+=1;
+      score++;
     }
   }
 }
@@ -156,7 +155,7 @@ void gameOver() {
       textSize(20);
       text("waow u so cool", width/2-100, 300);
       textSize(7);
-      text("like Mr Gallo",width/2-100,325);
+      text("like Mr Gallo", width/2-100, 325);
     }
   }
 }
@@ -182,6 +181,6 @@ void keyReleased() {
     down = false;
   }
 }
-void mousePressed() { 
-  println( mouseX, mouseY);
+void mousePressed() {
+  setup();
 }
