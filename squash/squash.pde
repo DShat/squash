@@ -1,12 +1,8 @@
-int paddleX = 75;
-int paddleY = height/2;
-int paddleWidth = 20;
-int paddleHeight = 150;
-int paddleSpeed = 10;
+int paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed;
 
 int ballX, ballY, ballHeight, ballWidth;
 
-int xSpeed, ySpeed;
+double xSpeedNormal, ySpeedNormal;
 
 boolean up, down;
 
@@ -17,7 +13,20 @@ int bG1[], bG2[];
 
 int i;
 
-int score = 0;
+int score;
+
+int screen = 0;
+int bigFont = 48;
+int mediumFont = 28;
+int smallFont= 20;
+
+float mouseLoc;
+
+int normalDiffScreen = 1;
+int infernoDiffScreen = 2;
+int randomDiffScreen = 3;
+int pongScreen = 4;
+int coopScreen = 5;
 
 void setup() { 
   size(700, 580);
@@ -37,17 +46,23 @@ void setup() {
   for (int q=0; q<backgroundColour1.length; q++) {
     backgroundColour2[q] = color(bG2[q], bG2[q], bG2[q]);
   }
+  paddleX = 75;
+  paddleY = height/2;
+  paddleWidth = 20;
+  paddleHeight = 150;
+  paddleSpeed = 10;
   ballX = width/2;
   ballY = height/2;
   ballWidth = 50;
   ballHeight = 50;
-  xSpeed = 5;
-  ySpeed = 4;
+  xSpeedNormal = 5;
+  ySpeedNormal = 4;
   backgroundGradients();
+  score = 0;
 }
 
 void draw() {
-  normalMode();
+  screen();
 }
 
 void normalMode() {
@@ -67,7 +82,7 @@ void normalMode() {
 
 void backgroundGradients() {
   int bgNumber = 1;
-  int opacity = 255;
+  int opacity = 1;
   int theLight = width/4;
   i=0;
   bgColourmodifier=0;
@@ -109,8 +124,8 @@ void drawBall() {
 }
 
 void moveBall() {
-  ballX+= xSpeed;
-  ballY+= ySpeed;
+  ballX+= xSpeedNormal;
+  ballY+= ySpeedNormal;
 }
 
 void theWall() {
@@ -121,28 +136,29 @@ void theWall() {
 
 void ballBounce() {
   if (ballX > width-100 - ballWidth/2) {
-    xSpeed = -xSpeed;
+    xSpeedNormal = -xSpeedNormal;
   }
-  if (ballY > height - ballHeight/2) {
-    ySpeed = -ySpeed;
-  } else if (ballY < ballHeight/2) {
-    ySpeed = -ySpeed;
+  if (ballY >= height - ballHeight/2) {
+    ySpeedNormal = -ySpeedNormal;
+  } else if (ballY - ballHeight/2 < 0) {
+    ySpeedNormal = -ySpeedNormal;
   }
 }
 
 void paddleBounce() {
   if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
-    if (xSpeed < 0) {
-      xSpeed = -xSpeed*119/100;
-      score++;
+    if (xSpeedNormal < 0) {
+      xSpeedNormal = -xSpeedNormal*105/100;
+      ySpeedNormal = ySpeedNormal*106/100;
+      score+=1;
     }
   }
 }
 
 void gameOver() {
   if (ballX - ballWidth/2< 0) {
-    xSpeed = 0;
-    ySpeed = 0;
+    xSpeedNormal = 0;
+    ySpeedNormal = 0;
     if (score < 10) {
       text("you suck >:]", 100, 300);
     } else if (score < 20 && score >= 10) {
@@ -152,10 +168,24 @@ void gameOver() {
     } else if (score < 100 && score >= 50) {
       text("waow", 100, 300);
     } else if (score >= 100) {
-      textSize(20);
-      text("waow u so cool", width/2-100, 300);
+      textSize(80);
+      text("waow u so cool", 0, 300);
       textSize(7);
       text("like Mr Gallo", width/2-100, 325);
+    }
+    textSize(30);
+    text("Title Screen", width/5, 500);
+    text("Try Again?", width/4+width/3, 500);
+    mouseLoc = dist(mouseX, mouseY, 217, 492);
+    if (mousePressed) {
+      if (mouseLoc <= 120) {
+        screen = 0;
+        setup();
+      }
+      mouseLoc = dist(mouseX, mouseY, 471, 492);
+      if (mouseLoc <= 120) {
+       background(100);
+      }
     }
   }
 }
@@ -181,6 +211,87 @@ void keyReleased() {
     down = false;
   }
 }
+
+
+void screen() {
+  if (screen == 0) {
+    background(0);
+
+    fill(255);
+
+    textSize(bigFont);
+    text("Project S", width/2-100, 150);
+
+    textSize(mediumFont);
+    text("Singleplayer", width/2-250, 200);
+
+    textSize(smallFont);
+    text("Normal", width/2-230, 250);
+
+    textSize(smallFont);
+    text("Infernal+", width/2-230, 340);
+
+    textSize(smallFont);
+    text("Random", width/2-230, 430);
+
+    textSize(mediumFont);
+    text("Multiplayer", width/2+100, 200);
+
+    textSize(smallFont);
+    text("Pong", width/2+120, 250);
+
+    textSize(smallFont);
+    text("Co-op", width/2+120, 370);
+
+    textSize(mediumFont);
+    text("Credits: Derek Shat, Leo Xiao", width/2-200, 530);
+  }
+  fill(0, 0, 0, 0);
+  noStroke(); //normal diff button
+  rect(120, 228, 90, 30); 
+
+  noStroke(); //inferno diff button
+  rect(120, 288, 90, 30);
+
+  noStroke(); //random diff button
+  rect(120, 348, 90, 30);
+
+  noStroke(); //pong button
+  rect(465, 228, 90, 30);
+
+  noStroke(); //co op music
+  rect(465, 348, 90, 30);
+
+
+  if (screen == normalDiffScreen) {
+    normalMode();
+  }
+}
+
 void mousePressed() {
-  setup();
+  mouseLoc = dist(mouseX, mouseY, 120, 246);
+  if (mouseLoc <= 90 && screen == 0) {
+    screen = normalDiffScreen;
+  }
+
+  mouseLoc = dist(mouseX, mouseY, 120, 332);
+  if (mouseLoc <= 90 && screen == 0) {
+    screen = infernoDiffScreen;
+  }
+
+  mouseLoc = dist(mouseX, mouseY, 120, 423);
+  if (mouseLoc <= 90 && screen == 0) {
+    screen = randomDiffScreen;
+  }
+
+  mouseLoc = dist(mouseX, mouseY, 465, 288);
+  if (mouseLoc <= 90 && screen == 0) {
+    screen = pongScreen;
+  }
+
+  mouseLoc = dist(mouseX, mouseY, 465, 408);
+  if (mouseLoc <= 90 && screen == 0) {
+    screen = coopScreen;
+  }
+  println(mouseX, mouseY);
 }
