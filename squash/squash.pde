@@ -184,7 +184,9 @@ void gameOver() {
       }
       mouseLoc = dist(mouseX, mouseY, 471, 492);
       if (mouseLoc <= 120) {
-       background(100);
+        screen = normalDiffScreen;
+        setup();
+        
       }
     }
   }
@@ -269,14 +271,14 @@ void screen() {
 }
 
 void mousePressed() {
-  mouseLoc = dist(mouseX, mouseY, 120, 246);
-  if (mouseLoc <= 90 && screen == 0) {
+  mouseLoc = dist(mouseX, mouseY, 165, 246);
+  if (mouseLoc <= 50 && screen == 0) {
     screen = normalDiffScreen;
   }
 
-  mouseLoc = dist(mouseX, mouseY, 120, 332);
+  mouseLoc = dist(mouseX, mouseY, 165, 332);
   if (mouseLoc <= 90 && screen == 0) {
-    screen = infernoDiffScreen;
+    
   }
 
   mouseLoc = dist(mouseX, mouseY, 120, 423);
