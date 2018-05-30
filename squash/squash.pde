@@ -1,6 +1,6 @@
 int paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed;
 
-int ballX, ballY, ballHeight, ballWidth;
+float ballX, ballY, ballHeight, ballWidth;
 
 double xSpeedNormal, ySpeedNormal;
 
@@ -124,8 +124,8 @@ void drawBall() {
 }
 
 void moveBall() {
-  ballX+= xSpeedNormal;
-  ballY+= ySpeedNormal;
+  ballX += xSpeedNormal;
+  ballY += ySpeedNormal;
 }
 
 void theWall() {
