@@ -177,6 +177,13 @@ void ballBounce() {
 void ballBounceRandom() {
   if (ballX > width-100 - ballWidth/2) {
     xSpeed = -xSpeed*random(0.5,2);
+    ySpeed = - ySpeed*random(0.5,2);
+    if(xSpeed >= 15 || xSpeed <= -15){
+      xSpeed = random(-15, 15);
+    }
+    if(ySpeed >= 10){
+      ySpeed = random(-10,10);
+    }
   }
   if (ballY >= height - ballHeight/2) {
     ySpeed = -ySpeed*random(0.5,2);
@@ -211,11 +218,18 @@ void paddleBounceInfernal() {
    }
 }
 void paddleBounceRandom() {
-   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
+   if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
       xSpeed = -xSpeed*random(1,2);
       ySpeed = ySpeed*random(-1.5,1.5);
       score+=1;
+    }
+    if (xSpeed >= 15){
+      xSpeed = 15;
+    }
+    if(ySpeed <= 3 || ySpeed >= 8){
+      ySpeed = random(-4,4);
+      
     }
    }
 }
