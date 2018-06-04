@@ -62,7 +62,7 @@ void setup() {
   xSpeedN = 105/100;
   ySpeedN = 104/100;
   backgroundGradients();
-  score = 10;
+  score = 0;
 }
 
 void draw() {
@@ -86,6 +86,7 @@ void normalMode() {
 void infernalMode() {
   background(0);
   theWall();
+  paddleHeight = 200;
   drawPaddle();
   movePaddle();
   restrictPaddle();
@@ -238,6 +239,12 @@ void paddleBounceInfernal() {
       xSpeed = -xSpeed*108/100;
       ySpeed = ySpeed*107/100;
       score+=1;
+    }
+    if(xSpeed >= 25){
+      xSpeed = 25;
+    }
+    if(ySpeed >= 20){
+      ySpeed = 20;
     }
    }
 }
