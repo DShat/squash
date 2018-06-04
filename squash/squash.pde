@@ -181,40 +181,40 @@ void ballBounce() {
 }
 void ballBounceRandom() {
   if (ballX > width-100 - ballWidth/2) {
-    xSpeed = -random(3, 13);
-    ySpeed = random(-10, 10);
-    if (xSpeed >= 16) {
+    xSpeed = -random(3,13);
+    ySpeed = random(-10,10);
+    if(xSpeed >= 16){
       xSpeed = random(-16, 16);
-      if (xSpeed <= 5 && xSpeed >= 0) {
+      if(xSpeed <= 5 && xSpeed >= 0){
         xSpeed = 5;
-      }
+      }      
     }
-    if (ySpeed >= 10) {
-      ySpeed = random(-10, 10);
-      if (ySpeed <=2 && ySpeed >= 0) {
+    if(ySpeed >= 10){
+      ySpeed = random(-10,10);
+      if(ySpeed <=2 && ySpeed >= 0){
         ySpeed = 3;
       }
-      if (ySpeed >= -2 && ySpeed <= 0) {
+      if(ySpeed >= -2 && ySpeed <= 0){
         ySpeed = -3;
       }
     }
   }
   if (ballY >= height - ballHeight/2) {
-    ySpeed = -random(3, 10);
-    xSpeed = random(-10, 10);
-    if (xSpeed <= 3 && xSpeed >= 0) {
+    ySpeed = -random(3,10);
+    xSpeed = random(-10,10);
+    if(xSpeed <= 3 && xSpeed >= 0){
       xSpeed =3;
     }
-    if (xSpeed >= -3 && xSpeed <= 0) {
+    if(xSpeed >= -3 && xSpeed <= 0){
       xSpeed = -3;
     }
   } else if (ballY - ballHeight/2 < 0) {
-    ySpeed = random(3, 10);
-    xSpeed = random(-10, 10);
-    if (xSpeed <= 3 && xSpeed >= 0) {
+    ySpeed = random(3,10);
+    xSpeed = random(-10,10);
+    if(xSpeed <= 3 && xSpeed >= 0){
       xSpeed =3;
     }
-    if (xSpeed >= -3 && xSpeed <= 0) {
+    if(xSpeed >= -3 && xSpeed <= 0){
       xSpeed = -3;
     }
   }
@@ -227,45 +227,45 @@ void paddleBounceNormal() {
       ySpeed = ySpeed*104/100;
       score+=1;
     }
-    if (xSpeed >= 10) {
+    if (xSpeed >= 10){
       xSpeed = 10;
     }
-    if (ySpeed >= 14) {
+    if (ySpeed >= 14){
       ySpeed = 10;
     }
   }
 }
 
 void paddleBounceInfernal() {
-  if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
+   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
       xSpeed = -xSpeed*108/100;
       ySpeed = ySpeed*107/100;
       score+=1;
     }
-    if (xSpeed >= 25) {
+    if(xSpeed >= 25){
       xSpeed = 25;
     }
-    if (ySpeed >= 20) {
+    if(ySpeed >= 20){
       ySpeed = 20;
     }
-  }
+   }
 }
 void paddleBounceRandom() {
-  if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
+   if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
-      xSpeed = random(5, 25);
-      ySpeed = random(-10, 10);
+      xSpeed = random(5,25);
+      ySpeed = random(-10,10);
       score+=1;
     }
-    if (ySpeed <= 3 && ySpeed >= 0) {
-      ySpeed = 3;
+      if(ySpeed <= 3 && ySpeed >= 0){
+        ySpeed = 3;
+      }
+      if(ySpeed >= -3 && ySpeed <= 0){
+        ySpeed = -3;
+      }
     }
-    if (ySpeed >= -3 && ySpeed <= 0) {
-      ySpeed = -3;
-    }
-  }
-}
+   }
 void gameOver() {
   if (ballX - ballWidth/2< 0) {
     xSpeed = 0;
@@ -275,7 +275,7 @@ void gameOver() {
     } else if (score < 20 && score >= 10) {
       text("git gud", 100, 300);
       textSize(7);
-      text("hub", 228, 300);
+      text("hub",228,300);
     } else if (score < 50 && score >= 20) {
       text("not bad", 100, 300);
     } else if (score < 100 && score >= 50) {
@@ -286,8 +286,6 @@ void gameOver() {
       textSize(7);
       text("like Mr Gallo", width/2-100, 325);
     }
-    }
-
     textSize(30);
     text("Title Screen", width/5, 500);
     text("Try Again?", width/4+width/3, 500);
@@ -299,15 +297,15 @@ void gameOver() {
       }
       mouseLoc = dist(mouseX, mouseY, 471, 492);
       if (mouseLoc <= 120) {
-        if (screen == 1) {
-          screen = normalDiffScreen;
-          setup();
+        if(screen == 1){
+        screen = normalDiffScreen;
+        setup();
         }
-        if (screen == 2) {
+        if(screen == 2){
           screen = infernalDiffScreen;
           setup();
         }
-        if (screen == 3) {
+        if(screen == 3){
           screen = randomDiffScreen;
           setup();
         }
@@ -321,10 +319,10 @@ void scores() {
   text(score, width/2, 100);
 }
 
-void awesomeFace() {
+void awesomeFace(){
   image(img, 600, 230, 100, 100);
 }
-
+    
 
 void keyPressed() {
   if (key == 'w'|| key == 'W') {
@@ -397,10 +395,10 @@ void screen() {
   if (screen == normalDiffScreen) {
     normalMode();
   }
-  if (screen == infernalDiffScreen) {
+  if (screen == infernalDiffScreen){
     infernalMode();
   }
-  if (screen == randomDiffScreen) {
+  if (screen == randomDiffScreen){
     randomMode();
   }
 }
