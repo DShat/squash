@@ -4,7 +4,7 @@ float ballX, ballY, ballHeight, ballWidth;
 
 double xSpeed, ySpeed;
 
-double xSpeedN, ySpeedN, xSpeedL, ySpeedL;
+double xSpeedN, ySpeedN, xSpeedI, ySpeedI;
 
 boolean up, down;
 
@@ -73,7 +73,7 @@ void draw() {
 }
 
 void normalMode() {
-  background(0);
+  background(#00A71D);
   theWall();
   drawPaddle();
   movePaddle();
@@ -87,7 +87,7 @@ void normalMode() {
 }
 
 void infernalMode() {
-  background(0);
+  background(#A7009D);
   theWall();
   paddleHeight = 200;
   drawPaddle();
@@ -101,7 +101,8 @@ void infernalMode() {
   scores();
 }
 void randomMode() {
-  background(0);
+  background(#FF95D0);
+  seizureBackground();
   theWall();
   awesomeFace();
   drawPaddle();
@@ -113,6 +114,10 @@ void randomMode() {
   paddleBounceRandom();
   gameOver();
   scores();
+}
+
+void coopMode(){
+  
 }
 
 void backgroundGradients() {
@@ -341,6 +346,14 @@ void keyReleased() {
   }
 }
 
+void seizureBackground(){
+  for(int i = 1; i<20; i++){
+    if(score > i*10){
+      background(random(0,255),random(0,255),random(0,255));
+      
+    }
+  }
+}
 
 void screen() {
   if (screen == 0) {
