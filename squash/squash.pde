@@ -1,12 +1,12 @@
-int paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed;
+int paddleX, paddleY, paddleY2, paddleWidth, paddleHeight, paddleSpeed;
 
-float ballX, ballY, ballHeight, ballWidth;
+float ballX, ballY, ballX2, ballY2, ballHeight, ballWidth;
 
-double xSpeed, ySpeed;
+double xSpeed, xSpeed2, ySpeed, ySpeed2;
 
 double xSpeedN, ySpeedN, xSpeedI, ySpeedI;
 
-boolean up, down;
+boolean up, up2, down, down2;
 
 int backgroundColour1[], backgroundColour2[];
 float bgColourmodifier;
@@ -35,36 +35,25 @@ PImage img;
 void setup() { 
   size(700, 580);
   img = loadImage("awesomeface.png");
-  bG1 = new int[10];
-  for (int q=0; q<bG1.length; q+=1) {
-    bG1[q] = (q*10);
-  }
-  bG2 = new int[10];
-  for (int q=0; q<bG2.length; q+=1) {
-    bG2[q] = (255-q*10);
-  }
-  backgroundColour1 = new int[10];
-  for (int q=0; q<backgroundColour1.length; q++) {
-    backgroundColour1[q] = color(bG1[q], bG1[q], bG1[q]);
-  }
-  backgroundColour2 = new int[10];
-  for (int q=0; q<backgroundColour1.length; q++) {
-    backgroundColour2[q] = color(bG2[q], bG2[q], bG2[q]);
-  }
+
   paddleX = 75;
   paddleY = height/2;
+  paddleY2 = height/2;
   paddleWidth = 20;
   paddleHeight = 150;
   paddleSpeed = 10;
   ballX = width/2;
+  ballX2 = 3*width/4;
   ballY = height/2;
+  ballY2 = height/4;
   ballWidth = 50;
   ballHeight = 50;
   xSpeed = 5;
+  xSpeed2 = 3;
   ySpeed = 4;
+  ySpeed2 = 4; 
   xSpeedN = 105/100;
   ySpeedN = 104/100;
-  backgroundGradients();
   score = 0;
 }
 
@@ -116,29 +105,29 @@ void randomMode() {
   scores();
 }
 
-void coopMode(){
-  
-}
-
-void backgroundGradients() {
-  int bgNumber = 1;
-  int opacity = 1;
-  int theLight = width/4;
-  i=0;
-  bgColourmodifier=0;
-  while (i<theLight) {
-    fill(lerpColor(backgroundColour2[bgNumber], backgroundColour1[bgNumber], bgColourmodifier), opacity);
-    noStroke();
-    rect(i, 0, i+2, height, 0.25);
-    i+=1;
-    bgColourmodifier+=0.0085;
-  }
+void coopMode() {
+  background(#00A71D);
+  theWall();
+  drawPaddle();
+  movePaddle();
+  restrictPaddle();
+  ballHeight = 35;
+  ballWidth = 35;
+  drawBall();
+  moveBall();
+  ballBounce();
+  paddleBounceCoop();
+  gameOver();
+  scores();
 }
 
 void drawPaddle() {
   fill(#00FFFF);
   noStroke();
   rect(paddleX, paddleY, paddleWidth, paddleHeight);
+  if (screen == coopScreen) {
+    rect(paddleX+50, paddleY2, paddleWidth, paddleHeight);
+  }
 }
 
 void movePaddle() {
@@ -147,7 +136,16 @@ void movePaddle() {
   } else if (down) {
     paddleY+=paddleSpeed;
   }
+  if (screen == coopScreen) {
+    if (up2) {
+      paddleY2 -= paddleSpeed;
+    } else if (down2) {
+      paddleY2 += paddleSpeed;
+    }
+  }
 }
+
+
 
 void restrictPaddle() {
   if (paddleY < 0) {
@@ -156,16 +154,33 @@ void restrictPaddle() {
   if (paddleY + paddleHeight > height) {
     paddleY -= paddleSpeed;
   }
+  if (screen == coopScreen) {
+    if (paddleY2 < 0) {
+      paddleY2 += paddleSpeed;
+    }
+    if (paddleY2 + paddleHeight > height) {
+      paddleY2 -= paddleSpeed;
+    }
+  }
 }
+
+
 
 void drawBall() {
   fill(#ffffff);
   ellipse(ballX, ballY, ballWidth, ballHeight);
+  if(screen == coopScreen){
+    ellipse(ballX2, ballY2, ballWidth, ballHeight);
+  }
 }
 
 void moveBall() {
   ballX += xSpeed;
   ballY += ySpeed;
+  if(screen == coopScreen){
+    ballX2 += xSpeed2;
+    ballY2 += ySpeed2;
+  }
 }
 
 void theWall() {
@@ -183,43 +198,54 @@ void ballBounce() {
   } else if (ballY - ballHeight/2 < 0) {
     ySpeed = -ySpeed;
   }
+  if (screen == coopScreen){
+    if (ballX2 >= width-100 - ballWidth/2){
+      xSpeed2 = -xSpeed2;
+    }
+    if (ballY2 >= height - ballHeight/2){
+      ySpeed2 = -ySpeed2;
+    }
+    else if (ballY2 - ballHeight/2 < 0){
+      ySpeed2 = -ySpeed2;
+    }
+  }
 }
 void ballBounceRandom() {
   if (ballX > width-100 - ballWidth/2) {
-    xSpeed = -random(3,13);
-    ySpeed = random(-10,10);
-    if(xSpeed >= 16){
+    xSpeed = -random(3, 13);
+    ySpeed = random(-10, 10);
+    if (xSpeed >= 16) {
       xSpeed = random(-16, 16);
-      if(xSpeed <= 5 && xSpeed >= 0){
+      if (xSpeed <= 5 && xSpeed >= 0) {
         xSpeed = 5;
-      }      
+      }
     }
-    if(ySpeed >= 10){
-      ySpeed = random(-10,10);
-      if(ySpeed <=2 && ySpeed >= 0){
+    if (ySpeed >= 10) {
+      ySpeed = random(-10, 10);
+      if (ySpeed <=2 && ySpeed >= 0) {
         ySpeed = 3;
       }
-      if(ySpeed >= -2 && ySpeed <= 0){
+      if (ySpeed >= -2 && ySpeed <= 0) {
         ySpeed = -3;
       }
     }
   }
   if (ballY >= height - ballHeight/2) {
-    ySpeed = -random(3,10);
-    xSpeed = random(-10,10);
-    if(xSpeed <= 3 && xSpeed >= 0){
+    ySpeed = -random(3, 10);
+    xSpeed = random(-10, 10);
+    if (xSpeed <= 3 && xSpeed >= 0) {
       xSpeed =3;
     }
-    if(xSpeed >= -3 && xSpeed <= 0){
+    if (xSpeed >= -3 && xSpeed <= 0) {
       xSpeed = -3;
     }
   } else if (ballY - ballHeight/2 < 0) {
-    ySpeed = random(3,10);
-    xSpeed = random(-10,10);
-    if(xSpeed <= 3 && xSpeed >= 0){
+    ySpeed = random(3, 10);
+    xSpeed = random(-10, 10);
+    if (xSpeed <= 3 && xSpeed >= 0) {
       xSpeed =3;
     }
-    if(xSpeed >= -3 && xSpeed <= 0){
+    if (xSpeed >= -3 && xSpeed <= 0) {
       xSpeed = -3;
     }
   }
@@ -232,55 +258,87 @@ void paddleBounceNormal() {
       ySpeed = ySpeed*104/100;
       score+=1;
     }
-    if (xSpeed >= 10){
+    if (xSpeed >= 10) {
       xSpeed = 10;
     }
-    if (ySpeed >= 14){
+    if (ySpeed >= 10) {
       ySpeed = 10;
     }
   }
 }
 
 void paddleBounceInfernal() {
-   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
+  if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
       xSpeed = -xSpeed*108/100;
       ySpeed = ySpeed*107/100;
       score+=1;
     }
-    if(xSpeed >= 25){
+    if (xSpeed >= 25) {
       xSpeed = 25;
     }
-    if(ySpeed >= 20){
+    if (ySpeed >= 20) {
       ySpeed = 20;
     }
-   }
+  }
 }
 void paddleBounceRandom() {
-   if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
+  if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
-      xSpeed = random(5,25);
-      ySpeed = random(-10,10);
+      xSpeed = random(5, 25);
+      ySpeed = random(-10, 10);
       score+=1;
     }
-      if(ySpeed <= 3 && ySpeed >= 0){
-        ySpeed = 3;
-      }
-      if(ySpeed >= -3 && ySpeed <= 0){
-        ySpeed = -3;
+    if (ySpeed <= 3 && ySpeed >= 0) {
+      ySpeed = 3;
+    }
+    if (ySpeed >= -3 && ySpeed <= 0) {
+      ySpeed = -3;
+    }
+  }
+}
+
+void paddleBounceCoop() {
+    if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY || ballX - ballWidth/2 > paddleX+50 && ballX - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2 ) { 
+      if (xSpeed < 0) {
+        xSpeed = -xSpeed*106/100;
+        ySpeed = ySpeed*105/100;
+        score+=1;
       }
     }
-   }
+     if (ballX2 - ballWidth/2 > paddleX && ballX2 - ballWidth/2 < paddleX + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY + paddleHeight && ballY2 + ballHeight/2 > paddleY || ballX2 - ballWidth/2 > paddleX+50 && ballX2 - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY2 + paddleHeight && ballY2 + ballHeight/2 > paddleY2 ) { 
+      if (xSpeed2 < 0) {
+        xSpeed2 = -xSpeed2*108/100;
+        ySpeed2 = ySpeed2*109/100;
+        score +=1;
+      }
+     }
+      if (xSpeed >= 10) {
+        xSpeed = 10;
+      }
+      if (ySpeed >= 14) {
+        ySpeed = 10;
+      }
+      if (xSpeed2 >= 12){
+        xSpeed2 = 12;
+      }
+      if (ySpeed2 >= 16){
+        ySpeed2 = 16;
+      }
+    }
+
 void gameOver() {
-  if (ballX - ballWidth/2< 0) {
+  if (ballX - ballWidth/2< 0|| ballX2 - ballWidth/2 <0) {
     xSpeed = 0;
     ySpeed = 0;
+    xSpeed2 =0;
+    ySpeed2 =0;
     if (score < 10) {
       text("you suck >:]", 100, 300);
     } else if (score < 20 && score >= 10) {
       text("git gud", 100, 300);
       textSize(7);
-      text("hub",228,300);
+      text("hub", 228, 300);
     } else if (score < 50 && score >= 20) {
       text("not bad", 100, 300);
     } else if (score < 100 && score >= 50) {
@@ -302,16 +360,24 @@ void gameOver() {
       }
       mouseLoc = dist(mouseX, mouseY, 471, 492);
       if (mouseLoc <= 120) {
-        if(screen == 1){
-        screen = normalDiffScreen;
-        setup();
+        if (screen == 1) {
+          screen = normalDiffScreen;
+          setup();
         }
-        if(screen == 2){
+        if (screen == 2) {
           screen = infernalDiffScreen;
           setup();
         }
-        if(screen == 3){
+        if (screen == 3) {
           screen = randomDiffScreen;
+          setup();
+        }
+        if (screen == 4){
+          screen = pongScreen;
+          setup();
+        }
+        if (screen == 5) { 
+          screen = coopScreen;
           setup();
         }
       }
@@ -324,10 +390,10 @@ void scores() {
   text(score, width/2, 100);
 }
 
-void awesomeFace(){
+void awesomeFace() {
   image(img, 600, 230, 100, 100);
 }
-    
+
 
 void keyPressed() {
   if (key == 'w'|| key == 'W') {
@@ -335,6 +401,12 @@ void keyPressed() {
   } 
   if (key == 's'|| key == 'S') {
     down = true;
+  }
+  if (keyCode == UP) {
+    up2 = true;
+  }
+  if (keyCode == DOWN) {
+    down2 = true;
   }
 }
 void keyReleased() {
@@ -344,13 +416,18 @@ void keyReleased() {
   if (key == 's'|| key == 'S') {
     down = false;
   }
+  if (keyCode == UP) {
+    up2 = false;
+  }
+  if (keyCode == DOWN) {
+    down2 = false;
+  }
 }
 
-void seizureBackground(){
-  for(int i = 1; i<20; i++){
-    if(score > i*10){
-      background(random(0,255),random(0,255),random(0,255));
-      
+void seizureBackground() {
+  for (int i = 1; i<100; i++) {
+    if (score == i*10) {
+      background(random(0, 255), random(0, 255), random(0, 255));
     }
   }
 }
@@ -399,20 +476,23 @@ void screen() {
   rect(120, 348, 90, 30);
 
   noStroke(); //pong button
-  rect(465, 228, 90, 30);
+  rect(501, 228, 90, 30);
 
   noStroke(); //co op music
-  rect(465, 348, 90, 30);
+  rect(501, 364, 90, 30);
 
 
   if (screen == normalDiffScreen) {
     normalMode();
   }
-  if (screen == infernalDiffScreen){
+  if (screen == infernalDiffScreen) {
     infernalMode();
   }
-  if (screen == randomDiffScreen){
+  if (screen == randomDiffScreen) {
     randomMode();
+  }
+  if (screen == coopScreen) {
+    coopMode();
   }
 }
 
@@ -432,12 +512,12 @@ void mousePressed() {
     screen = randomDiffScreen;
   }
 
-  mouseLoc = dist(mouseX, mouseY, 465, 288);
+  mouseLoc = dist(mouseX, mouseY, 501, 288);
   if (mouseLoc <= 50 && screen == 0) {
     screen = pongScreen;
   }
 
-  mouseLoc = dist(mouseX, mouseY, 465, 408);
+  mouseLoc = dist(mouseX, mouseY, 501, 364);
   if (mouseLoc <= 50 && screen == 0) {
     screen = coopScreen;
   }
