@@ -1,66 +1,63 @@
-int paddleX, paddleY, paddleY2, paddleWidth, paddleHeight, paddleSpeed;
+int paddleX, paddleY, paddleY2, paddleWidth, paddleHeight, paddleSpeed; //paddle values such as x and y location, width and height, and speed
 
-float ballX, ballY, ballX2, ballY2, ballHeight, ballWidth;
+float ballX, ballY, ballX2, ballY2, ballHeight, ballWidth; //ball values like x and y location, width and height
 
-double xSpeed, xSpeed2, ySpeed, ySpeed2;
+double xSpeed, xSpeed2, ySpeed, ySpeed2; //the universal x and y speed of the ball
 
-double xSpeedN, ySpeedN, xSpeedI, ySpeedI;
+double xSpeedN, ySpeedN, xSpeedI, ySpeedI; //the x and y speed of the ball when normal or inferno is pressed (ball speed increases differently)
 
-boolean up, up2, down, down2;
+boolean up, up2, down, down2; //allows user to control paddle when they press w
 
-int backgroundColour1[], backgroundColour2[];
-float bgColourmodifier;
+int score; //remembers the number of times the ball hit the paddle
 
-int bG1[], bG2[];
+int screen = 0; //title screen value
+int bigFont = 48; //font size of the big fonts
+int mediumFont = 28; //font size of the medium fonts
+int smallFont = 20; //font size of the small fonts
 
-int i;
+float mouseLoc; //for clicking the options on the screen
 
-int score;
+int normalDiffScreen = 1; //normal screen value
+int infernalDiffScreen = 2; //infernal diff screen
+int randomDiffScreen = 3; //random diff screen
+int pongScreen = 4; //yeuseless
+int coopScreen = 5; //co-op mode 
 
-int screen = 0;
-int bigFont = 48;
-int mediumFont = 28;
-int smallFont= 20;
-
-float mouseLoc;
-
-int normalDiffScreen = 1;
-int infernalDiffScreen = 2;
-int randomDiffScreen = 3;
-int pongScreen = 4;
-int coopScreen = 5;
-
-PImage img;
+PImage img; //function for loading the image for random mode
 
 void setup() { 
-  size(700, 580);
-  img = loadImage("awesomeface.png");
+  size(700, 580); //size of canvas
+  img = loadImage("awesomeface.png"); //loads image for the game
 
-  paddleX = 75;
-  paddleY = height/2;
-  paddleY2 = height/2;
-  paddleWidth = 20;
-  paddleHeight = 150;
-  paddleSpeed = 10;
-  ballX = width/2;
-  ballX2 = 3*width/4;
-  ballY = height/2;
-  ballY2 = height/4;
-  ballWidth = 50;
-  ballHeight = 50;
-  xSpeed = 5;
-  xSpeed2 = 3;
-  ySpeed = 4;
-  ySpeed2 = 4; 
-  xSpeedN = 105/100;
-  ySpeedN = 104/100;
-  score = 0;
+  paddleX = 75; //x location of paddle
+  paddleY = height/2; //y location of paddle
+  paddleY2 = height/2; //y location of the second paddle (co-op mode only)
+  paddleWidth = 20; //width of paddle
+  paddleHeight = 150; //height of paddle
+  paddleSpeed = 10; //speed of paddle
+
+  ballX = width/2; //x location of ball
+  ballX2 = 3*width/4; //x location of the second ball (co-op mode only)
+  ballY = height/2; //y location of ball
+  ballY2 = height/4; //y location of second ball (co-op mode only)
+  ballWidth = 50; //width of ball
+  ballHeight = 50; //height of ball
+
+  xSpeed = 5; //x speed of ball
+  xSpeed2 = 3; //x speed of second ball (co-op mode only)
+  ySpeed = 4; //y speed of ball
+  ySpeed2 = 4; //y speed of second ball (co-op mode only)
+  xSpeedN = 105/100; //how much the xspeed increases when paddle hits ball in normal mode
+  ySpeedN = 104/100; //how much the yspeed increases when paddle hits ball in normal mode
+
+  score = 0; //sets the score value to 0
 }
 
 void draw() {
-  screen();
+  screen(); //draws the title screen
 }
 
+//all the functions normal mode needs to call
 void normalMode() {
   background(#00A71D);
   theWall();
@@ -75,6 +72,7 @@ void normalMode() {
   scores();
 }
 
+//all the functions inferno mode needs to call (it's similar to normal mode)
 void infernalMode() {
   background(#A7009D);
   theWall();
@@ -89,6 +87,8 @@ void infernalMode() {
   gameOver();
   scores();
 }
+
+//all the functions random mode needs to call
 void randomMode() {
   background(#FF95D0);
   seizureBackground();
@@ -105,6 +105,7 @@ void randomMode() {
   scores();
 }
 
+//all the functions co-op mode needs to call
 void coopMode() {
   background(#00A71D);
   theWall();
@@ -121,21 +122,25 @@ void coopMode() {
   scores();
 }
 
+//draws the paddle and colors it cyan
 void drawPaddle() {
   fill(#00FFFF);
   noStroke();
   rect(paddleX, paddleY, paddleWidth, paddleHeight);
+  //also draws the second paddle if the game is in the co-op screen
   if (screen == coopScreen) {
     rect(paddleX+50, paddleY2, paddleWidth, paddleHeight);
   }
 }
 
+//allows user to control the paddle up and down
 void movePaddle() {
   if (up) {
     paddleY-=paddleSpeed;
   } else if (down) {
     paddleY+=paddleSpeed;
   }
+  //if the game is in co-op screen then allows player 2 to control the second paddle
   if (screen == coopScreen) {
     if (up2) {
       paddleY2 -= paddleSpeed;
@@ -145,8 +150,7 @@ void movePaddle() {
   }
 }
 
-
-
+//stops the paddle from going off screen
 void restrictPaddle() {
   if (paddleY < 0) {
     paddleY += paddleSpeed;
@@ -164,73 +168,77 @@ void restrictPaddle() {
   }
 }
 
-
-
+//draws the ball and colors it white also draws the second ball if the game is in co-op mode
 void drawBall() {
   fill(#ffffff);
   ellipse(ballX, ballY, ballWidth, ballHeight);
-  if(screen == coopScreen){
+  if (screen == coopScreen) {
     ellipse(ballX2, ballY2, ballWidth, ballHeight);
   }
 }
 
+//moves the ball by constantly updating its x and y locations
 void moveBall() {
   ballX += xSpeed;
   ballY += ySpeed;
-  if(screen == coopScreen){
+  if (screen == coopScreen) {
     ballX2 += xSpeed2;
     ballY2 += ySpeed2;
   }
 }
 
+//draws the wall and colors it red
 void theWall() {
   noStroke();
   fill(#FF0000);
   rect(width-100, 0, width, height);
 }
 
+//allows the ball to bounce off the walls 
 void ballBounce() {
-  if (ballX > width-100 - ballWidth/2) {
+  if (ballX > width-100 - ballWidth/2) { //when the right side of the ball hits the wall on the left, the ball will bounce off
     xSpeed = -xSpeed;
   }
-  if (ballY >= height - ballHeight/2) {
+  if (ballY >= height - ballHeight/2) { //when ball hits the bottom of the screen, the ball bounces up
     ySpeed = -ySpeed;
-  } else if (ballY - ballHeight/2 < 0) {
+  } else if (ballY - ballHeight/2 < 0) { //when ball hits the top of the screen the ball bounces down
     ySpeed = -ySpeed;
   }
-  if (screen == coopScreen){
-    if (ballX2 >= width-100 - ballWidth/2){
+  //basically the same thing as above but in co-op mode for the second ball
+  if (screen == coopScreen) {
+    if (ballX2 >= width-100 - ballWidth/2) {
       xSpeed2 = -xSpeed2;
     }
-    if (ballY2 >= height - ballHeight/2){
+    if (ballY2 >= height - ballHeight/2) {
       ySpeed2 = -ySpeed2;
-    }
-    else if (ballY2 - ballHeight/2 < 0){
+    } else if (ballY2 - ballHeight/2 < 0) {
       ySpeed2 = -ySpeed2;
     }
   }
 }
+
+//for random mode only!
 void ballBounceRandom() {
-  if (ballX > width-100 - ballWidth/2) {
+  if (ballX > width-100 - ballWidth/2) { //when wall bounces off the wall on the right, the xspeed of ball changes depending on the number chosen randomly from 3 to 13
     xSpeed = -random(3, 13);
-    ySpeed = random(-10, 10);
+    ySpeed = random(-10, 10); //also changes the yspeed depending on random number picked from -10 to 10
     if (xSpeed >= 16) {
-      xSpeed = random(-16, 16);
+      xSpeed = random(-16, 16); //limits the speed if it ever becomes greater than 16 back to 16
       if (xSpeed <= 5 && xSpeed >= 0) {
-        xSpeed = 5;
+        xSpeed = 5; //sets minimum xspeed of ball to be 5
       }
     }
     if (ySpeed >= 10) {
-      ySpeed = random(-10, 10);
+      ySpeed = random(-10, 10); //when ball bounces off the wall on the left, the yspeed of ball changes depending on the number chosen randomly from -10 to 10
       if (ySpeed <=2 && ySpeed >= 0) {
-        ySpeed = 3;
+        ySpeed = 3; //makes the minimum positive yspeed of the ball 3
       }
       if (ySpeed >= -2 && ySpeed <= 0) {
-        ySpeed = -3;
+        ySpeed = -3; //makes the minimum negative yspeed of the ball -3
       }
     }
   }
-  if (ballY >= height - ballHeight/2) {
+  if (ballY >= height - ballHeight/2) { //this code makes the ball change its speed to a random value when it hits the bottom of the screen, same change as when it hits the right
     ySpeed = -random(3, 10);
     xSpeed = random(-10, 10);
     if (xSpeed <= 3 && xSpeed >= 0) {
@@ -251,37 +259,42 @@ void ballBounceRandom() {
   }
 }
 
-void paddleBounceNormal() {
+void paddleBounceNormal() { //when the left of the ball hits the 
+  //left of the ball is greater than middle of the paddle and left of ball is less than the right of paddle
+  //                                                                             bally has to be less than the top of the paddle and greater than the bottom of the paddle
   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
-      xSpeed = -xSpeed*105/100;
+      xSpeed = -xSpeed*105/100; //when conditions are met makes ball go right and a little bit faster
       ySpeed = ySpeed*104/100;
-      score+=1;
+      score+=1; //increases the score everytime paddle hits ball
     }
     if (xSpeed >= 10) {
-      xSpeed = 10;
+      xSpeed = 10; //limits the xspeed to be 10 so it doesn't keep going faster infinitely
     }
     if (ySpeed >= 10) {
-      ySpeed = 10;
+      ySpeed = 10; //limits the yspeed so it doesnt keep going faster infinitely
     }
   }
 }
 
-void paddleBounceInfernal() {
+//mostly the same as the normal mode code
+void paddleBounceInfernal() { 
   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
-      xSpeed = -xSpeed*108/100;
+      xSpeed = -xSpeed*108/100; //made the multiplier a bit higher
       ySpeed = ySpeed*107/100;
       score+=1;
     }
     if (xSpeed >= 25) {
-      xSpeed = 25;
+      xSpeed = 25; //made the speed limit higher as well
     }
     if (ySpeed >= 20) {
       ySpeed = 20;
     }
   }
 }
+
+//when ball hits paddle in random mode, the ball speed also changes randomly
 void paddleBounceRandom() {
   if (ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
     if (xSpeed < 0) {
@@ -298,41 +311,45 @@ void paddleBounceRandom() {
   }
 }
 
+//allows both balls to interact with both paddles
 void paddleBounceCoop() {
-    if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY || ballX - ballWidth/2 > paddleX+50 && ballX - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2 ) { 
-      if (xSpeed < 0) {
-        xSpeed = -xSpeed*106/100;
-        ySpeed = ySpeed*105/100;
-        score+=1;
-      }
+  if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY || ballX - ballWidth/2 > paddleX+50 && ballX - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2 ) { 
+    if (xSpeed < 0) {
+      xSpeed = -xSpeed*106/100;
+      ySpeed = ySpeed*105/100;
+      score+=1;
     }
-     if (ballX2 - ballWidth/2 > paddleX && ballX2 - ballWidth/2 < paddleX + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY + paddleHeight && ballY2 + ballHeight/2 > paddleY || ballX2 - ballWidth/2 > paddleX+50 && ballX2 - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY2 + paddleHeight && ballY2 + ballHeight/2 > paddleY2 ) { 
-      if (xSpeed2 < 0) {
-        xSpeed2 = -xSpeed2*108/100;
-        ySpeed2 = ySpeed2*109/100;
-        score +=1;
-      }
-     }
-      if (xSpeed >= 10) {
-        xSpeed = 10;
-      }
-      if (ySpeed >= 14) {
-        ySpeed = 10;
-      }
-      if (xSpeed2 >= 12){
-        xSpeed2 = 12;
-      }
-      if (ySpeed2 >= 16){
-        ySpeed2 = 16;
-      }
+  }
+  if (ballX2 - ballWidth/2 > paddleX && ballX2 - ballWidth/2 < paddleX + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY + paddleHeight && ballY2 + ballHeight/2 > paddleY || ballX2 - ballWidth/2 > paddleX+50 && ballX2 - ballWidth/2 < paddleX+50 + paddleWidth/2 && ballY2 - ballHeight/2 < paddleY2 + paddleHeight && ballY2 + ballHeight/2 > paddleY2 ) { 
+    if (xSpeed2 < 0) {
+      xSpeed2 = -xSpeed2*108/100;
+      ySpeed2 = ySpeed2*109/100;
+      score +=1;
     }
+  }
+  if (xSpeed >= 10) {
+    xSpeed = 10;
+  }
+  if (ySpeed >= 14) {
+    ySpeed = 10;
+  }
+  if (xSpeed2 >= 12) {
+    xSpeed2 = 12;
+  }
+  if (ySpeed2 >= 16) {
+    ySpeed2 = 16;
+  }
+}
 
 void gameOver() {
-  if (ballX - ballWidth/2< 0|| ballX2 - ballWidth/2 <0) {
-    xSpeed = 0;
+  if (ballX - ballWidth/2 < 0) { //when the ball hits the left of the screen
+  
+    xSpeed = 0; //balls stop moving
     ySpeed = 0;
     xSpeed2 =0;
     ySpeed2 =0;
+    
+    //displays text based on the score
     if (score < 10) {
       text("you suck >:]", 100, 300);
     } else if (score < 20 && score >= 10) {
@@ -349,6 +366,8 @@ void gameOver() {
       textSize(7);
       text("like Mr Gallo", width/2-100, 325);
     }
+    
+    //also gives user two options to go back to the main menu (screen 1) or to play the same mode again
     textSize(30);
     text("Title Screen", width/5, 500);
     text("Try Again?", width/4+width/3, 500);
@@ -372,7 +391,7 @@ void gameOver() {
           screen = randomDiffScreen;
           setup();
         }
-        if (screen == 4){
+        if (screen == 4) {
           screen = pongScreen;
           setup();
         }
@@ -384,6 +403,8 @@ void gameOver() {
     }
   }
 }
+
+//displays the score in the center of screen near the top
 void scores() {
   textSize(100);
   fill(255);
@@ -394,7 +415,7 @@ void awesomeFace() {
   image(img, 600, 230, 100, 100);
 }
 
-
+//if user pressed w/up or s/down then the paddle will move until they release the key
 void keyPressed() {
   if (key == 'w'|| key == 'W') {
     up = true;
@@ -409,6 +430,7 @@ void keyPressed() {
     down2 = true;
   }
 }
+
 void keyReleased() {
   if (key == 'w'|| key == 'W') {
     up = false;
@@ -424,6 +446,7 @@ void keyReleased() {
   }
 }
 
+//when score is a multiple of 10 the background starts spazzing out, only in random mode, idk why this exists .-.
 void seizureBackground() {
   for (int i = 1; i<100; i++) {
     if (score == i*10) {
@@ -432,6 +455,7 @@ void seizureBackground() {
   }
 }
 
+//the main menu code! Which is just a bunch of text and buttons
 void screen() {
   if (screen == 0) {
     background(0);
@@ -478,9 +502,8 @@ void screen() {
   noStroke(); //pong button
   rect(501, 228, 90, 30);
 
-  noStroke(); //co op music
+  noStroke(); //co op button
   rect(501, 364, 90, 30);
-
 
   if (screen == normalDiffScreen) {
     normalMode();
@@ -496,6 +519,7 @@ void screen() {
   }
 }
 
+//uses the distance of the mouse and the invisible square to see what the user has clicked to go to the appropriate screen
 void mousePressed() {
   mouseLoc = dist(mouseX, mouseY, 165, 246);
   if (mouseLoc <= 50 && screen == 0) {
@@ -521,5 +545,5 @@ void mousePressed() {
   if (mouseLoc <= 50 && screen == 0) {
     screen = coopScreen;
   }
-  println(mouseX, mouseY);
+  println(mouseX, mouseY); //for developers only ;)
 }
