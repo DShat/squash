@@ -24,6 +24,7 @@ int infernalDiffScreen = 2;
 int randomDiffScreen = 3;
 int pongScreen = 4;
 int coopScreen = 5;
+int randomPongScreen = 6;
 
 PImage img, img2;
 
@@ -31,12 +32,13 @@ void setup() {
   size(700, 580);
   img = loadImage("angery.png");
   img2 = loadImage("awesomeface.png");
-  bg = new int[5];
+  bg = new int[6];
   bg[0] = #1ACB00;
   bg[1] = #AF02F0;
   bg[2] = #FF95D0;
   bg[3] = #000000;
   bg[4] = #FFBC00;
+  bg[5] = #98FF00;
   paddleX = 75;
   paddleY = height/2;
   paddleY2 = height/2;
@@ -134,6 +136,19 @@ void coopMode() {
   scores();
 }
 
+void randomPongMode(){
+background(bg[5]);
+  drawPaddle();
+  movePaddle();
+  restrictPaddle();
+  drawBall();
+  moveBall();
+  ballBounceRandom();
+  ballReset();
+  paddleBounceRandomPong();
+  gameOverPong();
+  scores();
+}
 void drawPaddle() {
   fill(#00FFFF);
   noStroke();
@@ -142,7 +157,7 @@ void drawPaddle() {
     fill(#FFFF00);
     rect(paddleX+50, paddleY2, paddleWidth, paddleHeight);
   }
-  if (screen == pongScreen) {
+  if (screen == pongScreen || screen == randomPongScreen) {
     fill(#FF0000);
     rect(paddleX+550, paddleY2, paddleWidth, paddleHeight);
   }
@@ -154,7 +169,7 @@ void movePaddle() {
   } else if (down) {
     paddleY+=paddleSpeed;
   }
-  if (screen == coopScreen || screen == pongScreen) {
+  if (screen == coopScreen || screen == pongScreen || screen == randomPongScreen) {
     if (up2) {
       paddleY2 -= paddleSpeed;
     } else if (down2) {
@@ -172,7 +187,7 @@ void restrictPaddle() {
   if (paddleY + paddleHeight > height) {
     paddleY -= paddleSpeed;
   }
-  if (screen == coopScreen || screen == pongScreen) {
+  if (screen == coopScreen || screen == pongScreen || screen == randomPongScreen) {
     if (paddleY2 < 0) {
       paddleY2 += paddleSpeed;
     }
@@ -222,7 +237,7 @@ void ballBounce() {
   } else if (ballY - ballHeight/2 < 0) {
     ySpeed = -ySpeed;
   }
-  if (screen  != pongScreen) {
+  if (screen  != pongScreen && screen != randomPongScreen) {
     if (ballX > width-100 - ballWidth/2) {
       xSpeed = -xSpeed;
     }
@@ -239,6 +254,7 @@ void ballBounce() {
   }
 }
 void ballBounceRandom() {
+  if (screen != randomPongScreen){
   if (ballX > width-100 - ballWidth/2) {
     xSpeed = -random(3, 13);
     ySpeed = random(-10, 10);
@@ -257,6 +273,7 @@ void ballBounceRandom() {
         ySpeed = -3;
       }
     }
+  }
   }
   if (ballY >= height - ballHeight/2) {
     ySpeed = -random(3, 10);
@@ -324,12 +341,12 @@ void paddleBouncePong() {
     xSpeed = -xSpeed*105/100;
     ySpeed = ySpeed*104/100;
   }
-  if (ballX + ballWidth/2 > paddleX+550 && ballX + ballWidth/2 < paddleX+550 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2) {
+  else if (ballX + ballWidth/2 > paddleX+550 && ballX + ballWidth/2 < paddleX+550 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2) {
     xSpeed = -xSpeed*105/100;
     ySpeed = ySpeed*104/100;
   }
-  if (xSpeed >10){
-    xSpeed =10;
+  if (xSpeed >9){
+    xSpeed = 9;
   }
 }
 void paddleBounceCoop() {
@@ -360,6 +377,23 @@ void paddleBounceCoop() {
     ySpeed2 = 16;
   }
 }
+void paddleBounceRandomPong(){
+   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) {
+    xSpeed = random(5, 15);
+    ySpeed = random(-10, 10);
+  }
+  else if (ballX + ballWidth/2 > paddleX+550 && ballX + ballWidth/2 < paddleX+550 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2) {
+    xSpeed = random(-5,-15);
+    ySpeed = random(-10, 10);
+  }
+  if (ySpeed <= 3 && ySpeed >= 0) {
+        ySpeed = 3;
+      }
+      if (ySpeed >= -3 && ySpeed <= 0) {
+        ySpeed = -3;
+      }
+}
+
 void ballReset() {
   if (ballX - ballWidth/2 < 0) {
     score3 +=1;
@@ -418,12 +452,16 @@ void gameOver() {
           screen = coopScreen;
           setup();
         }
+        if (screen == 6) {
+          screen = randomPongScreen;
+          setup();
       }
     }
   }
 }
+}
 void gameOverPong() {
-  if (score == 10 || score2 == 10) {
+  if (score == 5 || score2 == 5) {
     xSpeed = 0;
     ySpeed = 0;
     textSize(30);
@@ -449,10 +487,10 @@ void gameOverPong() {
 void scores() {
   textSize(100);
   fill(255);
-  if (screen != pongScreen) {
+  if (screen != pongScreen && screen != randomPongScreen) {
     text(score, width/2+150, 100);
   }
-  if (screen == pongScreen) {
+  if (screen == pongScreen|| screen == randomPongScreen) {
     text(score2, width/2-150, 100);
     text(score3, width/2+150, 100);
   }
@@ -523,7 +561,10 @@ void screen() {
     text("Pong", width/2+120, 250);
 
     textSize(smallFont);
-    text("Co-op", width/2+120, 370);
+    text("Co-op", width/2+120, 340);
+    
+    textSize(smallFont);
+    text("Random Pong", width/2+120, 430);
 
     textSize(mediumFont);
     text("Credits: Derek Shat, Leo Xiao", width/2-200, 530);
@@ -560,6 +601,9 @@ void screen() {
   if (screen == coopScreen) {
     coopMode();
   }
+  if (screen == randomPongScreen){
+    randomPongMode();
+  }
 }
 
 void mousePressed() {
@@ -582,10 +626,13 @@ void mousePressed() {
   if (mouseLoc <= 50 && screen == 0) {
     screen = pongScreen;
   }
-
-  mouseLoc = dist(mouseX, mouseY, 501, 364);
+  mouseLoc = dist(mouseX,mouseY, 501,332);
+    if (mouseLoc <= 50 && screen ==0){
+      screen = coopScreen;
+    }
+  mouseLoc = dist(mouseX, mouseY, 501, 423);
   if (mouseLoc <= 50 && screen == 0) {
-    screen = coopScreen;
+    screen = randomPongScreen;
   }
   println(mouseX, mouseY);
 }
