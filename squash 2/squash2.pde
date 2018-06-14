@@ -20,7 +20,7 @@ float mouseLoc; //for clicking the options on the screen
 int normalDiffScreen = 1; //normal screen value
 int infernalDiffScreen = 2; //infernal diff screen
 int randomDiffScreen = 3; //random diff screen
-int pongScreen = 4; //yeuseless
+int pongScreen = 4; //pong mode
 int coopScreen = 5; //co-op mode 
 
 PImage img; //function for loading the image for random mode
@@ -59,7 +59,7 @@ void draw() {
 
 //all the functions normal mode needs to call
 void normalMode() {
-  background(#00A71D);
+  background(#00A71D); //background will
   theWall();
   drawPaddle();
   movePaddle();
