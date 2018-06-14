@@ -38,7 +38,7 @@ void setup() {
   bg[2] = #FF95D0;
   bg[3] = #000000;
   bg[4] = #FFBC00;
-  bg[5] = #98FF00;
+  bg[5] = #83DB00;
   paddleX = 75;
   paddleY = height/2;
   paddleY2 = height/2;
