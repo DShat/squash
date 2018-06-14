@@ -461,7 +461,7 @@ void gameOver() {
 }
 }
 void gameOverPong() {
-  if (score == 5 || score2 == 5) {
+  if (score3 == 5 || score2 == 5) {
     xSpeed = 0;
     ySpeed = 0;
     textSize(30);
