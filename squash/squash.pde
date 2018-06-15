@@ -256,10 +256,10 @@ void ballBounce() {
 void ballBounceRandom() {
   if (screen != randomPongScreen){
   if (ballX > width-100 - ballWidth/2) {
-    xSpeed = -random(3, 13);
+    xSpeed = -random(3, 15);
     ySpeed = random(-10, 10);
-    if (xSpeed >= 16) {
-      xSpeed = random(-16, 16);
+    if (xSpeed >= 15) {
+      xSpeed = random(-15, 15);
       if (xSpeed <= 5 && xSpeed >= 0) {
         xSpeed = 5;
       }
@@ -294,6 +294,7 @@ void ballBounceRandom() {
       xSpeed = -3;
     }
   }
+  
 }
 void paddleBounce() {
   if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) { 
@@ -379,11 +380,11 @@ void paddleBounceCoop() {
 }
 void paddleBounceRandomPong(){
    if (ballX - ballWidth/2 > paddleX && ballX - ballWidth/2 < paddleX + paddleWidth/2 && ballY - ballHeight/2 < paddleY + paddleHeight && ballY + ballHeight/2 > paddleY) {
-    xSpeed = random(5, 15);
+    xSpeed = random(5, 13);
     ySpeed = random(-10, 10);
   }
   else if (ballX + ballWidth/2 > paddleX+550 && ballX + ballWidth/2 < paddleX+550 + paddleWidth/2 && ballY - ballHeight/2 < paddleY2 + paddleHeight && ballY + ballHeight/2 > paddleY2) {
-    xSpeed = random(-5,-15);
+    xSpeed = random(-5,-13);
     ySpeed = random(-10, 10);
   }
   if (ySpeed <= 3 && ySpeed >= 0) {
